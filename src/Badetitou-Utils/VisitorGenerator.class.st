@@ -46,16 +46,18 @@ VisitorGenerator >> generateVisitorOf: aClass in: visitorClass [
 					'visit' , aClass name , ': a' , aClass name
 						,
 							'
+	<generated>
 	^ self visit' , aClass superclass name , ': a' , aClass name
-				classified: 'generated' ]
+				classified: 'visiting' ]
 		ifTrue: [ visitorClass
 				compile:
 					'visit' , aClass name , ': a' , aClass name
 						,
 							'
 	^ self subclassResponsibility'
-				classified: 'generated' ].
+				classified: 'visiting' ].
 	selector := aClass compile: 'accept: a', self visitorName, '
+	<generated>
 	^ a', self visitorName, ' visit', aClass name, ': self' classified: '*', self packageName, '-generated'.
 ]
 
