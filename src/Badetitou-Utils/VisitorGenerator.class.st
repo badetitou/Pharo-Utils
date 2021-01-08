@@ -3,9 +3,12 @@ Use me to create the visitor from a root class
 
 ```
 VisitorGenerator new 
-	packageName: 'Badetitou-Visitor'; 
-	root: FASTEntity; 
-	visitorName: #'FASTVisitor'; 
+	packageName: 'Famix-Java-Visitor'; 
+	root: FamixJavaEntity; 
+	visitorName: #'FamixJavaVisitor';
+	createTraitVisitor;
+	rejectedPrefix: 'FamixJava';
+	withoutTag;
 	generateVisitor.
 ```
 "
