@@ -17,7 +17,8 @@ Class {
 		'visitorName',
 		'root',
 		'rejectedPrefix',
-		'createTraitVisitor'
+		'createTraitVisitor',
+		'withTag'
 	],
 	#category : #'Badetitou-Utils'
 }
@@ -74,25 +75,47 @@ VisitorGenerator >> generateVisitor [
 
 { #category : #generating }
 VisitorGenerator >> generateVisitorOf: aClass in: visitorClass [
-
 	| selector |
 	aClass = self root
-		ifFalse: [ 
-			visitorClass
-				compile: 'visit' , (aClass name withoutPrefix: self rejectedPrefix) , ': a' , aClass name , '
+		ifFalse: [ visitorClass
+				compile:
+					'visit' , (aClass name withoutPrefix: self rejectedPrefix) , ': a'
+						, aClass name
+						,
+							'
 	<generated>
-	^ self visit' , (aClass superclass name withoutPrefix: self rejectedPrefix) , ': a' , aClass name
+	^ self visit'
+						, (aClass superclass name withoutPrefix: self rejectedPrefix)
+						, ': a' , aClass name
 				classified: 'visiting' ]
-		ifTrue: [ 
-			visitorClass
-				compile: 'visit' , (aClass name withoutPrefix: self rejectedPrefix) , ': a' , aClass name , '
+		ifTrue: [ visitorClass
+				compile:
+					'visit' , (aClass name withoutPrefix: self rejectedPrefix) , ': a'
+						, aClass name
+						,
+							'
 	^ self subclassResponsibility'
 				classified: 'visiting' ].
 	selector := aClass
-		            compile: 'accept: a' , self visitorName , '
-	<generated>
-	^ a' , self visitorName , ' visit' , (aClass name withoutPrefix: self rejectedPrefix) , ': self'
-		            classified: '*' , self packageName , '-generated'
+		compile:
+			(String
+				streamContents: [ :stream | 
+					stream
+						<< 'accept: a';
+						<< self visitorName;
+						<< String cr.
+					withTag
+						ifTrue: [ stream
+								<< '<generated>';
+								<< String cr ].
+					stream
+						<< String tab
+						<< '^ a';
+						<< self visitorName;
+						<< ' visit';
+						<< (aClass name withoutPrefix: self rejectedPrefix);
+						<< ': self' ])
+		classified: '*' , self packageName , '-generated'
 ]
 
 { #category : #accessing }
@@ -140,4 +163,14 @@ VisitorGenerator >> visitorName [
 { #category : #accessing }
 VisitorGenerator >> visitorName: anObject [
 	visitorName := anObject
+]
+
+{ #category : #accessing }
+VisitorGenerator >> withTag [
+	withTag := true
+]
+
+{ #category : #accessing }
+VisitorGenerator >> withoutTag [
+	withTag := false
 ]
