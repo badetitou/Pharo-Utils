@@ -52,9 +52,11 @@ VisitorGenerator >> createVisitorClass [
 
 { #category : #generating }
 VisitorGenerator >> createVisitorTrait [
-	^ Trait named: self visitorName
-	instanceVariableNames: ''
-	package: self packageName
+	^ Trait
+		named: self visitorName
+		uses: {}
+		slots: {}
+		package: self packageName
 ]
 
 { #category : #accessing }
